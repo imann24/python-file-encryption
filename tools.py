@@ -1,8 +1,8 @@
 import random
 
-cypher_name = "cypher.dat"
+cipher_name = "cipher.dat"
 
-def generate_cypher (ascii_limit = 128):
+def generate_cipher (ascii_limit = 128):
 	char_set = []
 	for i in range(0, ascii_limit):
 		char_set.append(chr(i))
@@ -20,5 +20,7 @@ def encrypt (file_path):
 	print("Encrypting")
 
 def de_encrypt (file_path):
-	print()
+	print("Unencrypting")
+
 def translate_chars (file_path, char_hash):
+	print("Translating")
