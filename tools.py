@@ -22,5 +22,16 @@ def encrypt (file_path):
 def de_encrypt (file_path):
 	print("Unencrypting")
 
+# Adapted from: 
+# http://stackoverflow.com/questions/17140886/how-to-search-and-replace-text-in-a-file-using-python
 def translate_chars (file_path, char_hash):
-	print("Translating")
+	rewrite_file = open(file_path, 'r+')
+
+	file_text = rewrite_file.read()
+
+	for i in range(0, len(file_text)):
+		file_text[i] = char_hash[file_text[i]]
+
+	rewrite_file.truncate()
+	rewrite_file.write(file_text)
+	rewrite_file.close()
