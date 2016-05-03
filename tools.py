@@ -1,4 +1,5 @@
 import random
+import os.path
 
 cipher_name = "cipher.dat"
 
@@ -18,6 +19,9 @@ def encrypt (file_path):
 	cipher = open(cipher_name, 'r')
 	char_hash = create_char_hash(cipher.read(), 0, 1)
 	translate_chars(file_path, char_hash) 
+
+def cypher_exists ():
+	return os.path.isfile(cipher_name)
 
 def de_encrypt (file_path):
 	cipher = open(cipher_name, 'r')
