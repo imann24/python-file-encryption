@@ -1,3 +1,5 @@
+# Author: Isaiah Mann
+# Description: Simple implementation of using a hash to encrypt a file
 import random
 import os.path
 
@@ -15,18 +17,32 @@ def generate_cipher (ascii_base = 32, ascii_limit = 128):
 			cipher.write("\n")
 	cipher.close()
 
+def cipher_exists ():
+	return os.path.isfile(cipher_name)
+
+
+def is_cipher (file_path):
+	return cipher_name in file_path
+
 def encrypt (file_path):
 	cipher = open(cipher_name, 'r')
 	char_hash = create_char_hash(cipher.read(), 0, 1)
-	translate_chars(file_path, char_hash) 
+	translate_file(file_path, char_hash) 
 
-def cypher_exists ():
-	return os.path.isfile(cipher_name)
+def encrypt_string (plain_string):
+	cipher = open(cipher_name, 'r')
+	char_hash = create_char_hash(cipher.read(), 0, 1)
+	return translate_string(plain_string, char_hash)
 
 def de_encrypt (file_path):
 	cipher = open(cipher_name, 'r')
 	char_hash = create_char_hash(cipher.read(), 1, 0)
-	translate_chars(file_path, char_hash)
+	translate_file(file_path, char_hash)
+
+def de_encrypt_string (encrypted_string):
+	cipher = open(cipher_name, 'r')
+	char_hash = create_char_hash(cipher.read(), 1, 0)
+	return translate_string(encrypted_string, char_hash)
 
 def create_char_hash(all_text, key_index, value_index):
 	text_array = all_text.split("\n")
@@ -35,18 +51,23 @@ def create_char_hash(all_text, key_index, value_index):
 		text_dict[text_array[i][key_index]] = text_array[i][value_index]
 	return text_dict
 
-# Adapted from: 
-# http://stackoverflow.com/questions/17140886/how-to-search-and-replace-text-in-a-file-using-python
-def translate_chars (file_path, char_hash):
+def translate_file (file_path, char_hash):
 	rewrite_file = open(file_path, 'r+')
 
 	file_text = rewrite_file.read()
 
-	file_text = list(file_text)
-
-	for i in range(0, len(file_text)):
-		file_text[i] = char_hash[file_text[i]]
 	rewrite_file.seek(0)
 	rewrite_file.truncate()
-	rewrite_file.write("".join(file_text))
+	rewrite_file.write(translate_string(file_text, char_hash))
 	rewrite_file.close()
+
+# Adapted from: 
+# http://stackoverflow.com/questions/17140886/how-to-search-and-replace-text-in-a-file-using-python
+def translate_string (text, char_hash):
+	text = list(text)
+
+	for i in range(0, len(text)):
+		if (text[i] in char_hash.keys()):
+			text[i] = char_hash[text[i]]
+
+	return "".join(text)
